@@ -2,125 +2,297 @@
 <%@ page import="com.collegeevent.model.Student" %>
 
 <%
-    // Get the existing session WITHOUT creating a new one
     jakarta.servlet.http.HttpSession currentSession =
             request.getSession(false);
 
-    // No session = not logged in
     if (currentSession == null) {
         response.sendRedirect("login.jsp");
         return;
     }
 
-    // Get logged-in student
     Student student =
             (Student) currentSession.getAttribute("student");
 
-    // No student in session = not logged in
     if (student == null) {
         response.sendRedirect("login.jsp");
         return;
     }
 
-    // Prevent browser caching
-    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    response.setHeader(
+            "Cache-Control",
+            "no-cache, no-store, must-revalidate"
+    );
     response.setHeader("Pragma", "no-cache");
     response.setHeader("Expires", "0");
+
+    String studentName = student.getName();
+
+    if (studentName == null || studentName.trim().isEmpty()) {
+        studentName = "Student";
+    }
+
+    String initial =
+            studentName.substring(0, 1).toUpperCase();
+
+    String department = student.getDepartment();
+
+    if (department == null || department.trim().isEmpty()) {
+        department = "Not set";
+    }
+
+    String year = student.getYear();
+
+    if (year == null || year.trim().isEmpty()) {
+        year = "Not set";
+    }
+
+    String phone = student.getPhone();
+
+    if (phone == null || phone.trim().isEmpty()) {
+        phone = "Not set";
+    }
+
+    String email = student.getEmail();
 %>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+    >
 
     <title>Student Dashboard | College Event Portal</title>
+
+
+    <!-- Prevent theme flash -->
+
+    <script>
+        (function () {
+
+            const savedTheme =
+                    localStorage.getItem("portal-theme");
+
+            if (
+                    savedTheme === "light" ||
+                    savedTheme === "dark" ||
+                    savedTheme === "nothing"
+            ) {
+
+                document.documentElement.setAttribute(
+                        "data-theme",
+                        savedTheme
+                );
+
+            }
+
+        })();
+    </script>
+
+
+    <!-- Font -->
+
+    <link
+            rel="preconnect"
+            href="https://fonts.googleapis.com"
+    >
+
+    <link
+            rel="preconnect"
+            href="https://fonts.gstatic.com"
+            crossorigin
+    >
+
+    <link
+            href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+            rel="stylesheet"
+    >
+
 
     <style>
 
         /* =========================================================
-           THEME SYSTEM
-        ========================================================= */
-
-        :root {
-            --bg: #f5f6f8;
-            --surface: rgba(255,255,255,0.82);
-            --surface-solid: #ffffff;
-            --text: #111318;
-            --muted: #70757f;
-            --border: rgba(0,0,0,0.08);
-            --accent: #2864e8;
-            --accent-hover: #174fc7;
-            --accent-soft: rgba(40,100,232,0.10);
-            --danger: #e5484d;
-            --shadow: 0 18px 50px rgba(0,0,0,0.07);
-            --radius: 20px;
-            --grid: transparent;
-        }
-
-        body.dark {
-            --bg: #0c0d0f;
-            --surface: rgba(23,24,28,0.84);
-            --surface-solid: #17181c;
-            --text: #f4f5f7;
-            --muted: #9297a1;
-            --border: rgba(255,255,255,0.09);
-            --accent: #5f8cff;
-            --accent-hover: #7ba0ff;
-            --accent-soft: rgba(95,140,255,0.13);
-            --danger: #ff6268;
-            --shadow: 0 18px 55px rgba(0,0,0,0.28);
-        }
-
-        body.nothing {
-            --bg: #050505;
-            --surface: #0b0b0b;
-            --surface-solid: #0b0b0b;
-            --text: #f4f4f4;
-            --muted: #8b8b8b;
-            --border: #292929;
-            --accent: #ff3333;
-            --accent-hover: #ff5555;
-            --accent-soft: rgba(255,51,51,0.10);
-            --danger: #ff3333;
-            --shadow: none;
-            --radius: 5px;
-            --grid: rgba(255,255,255,0.035);
-        }
-
-
-        /* =========================================================
-           RESET
+           GLOBAL
         ========================================================= */
 
         * {
             box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
+
 
         html {
             scroll-behavior: smooth;
         }
 
+
         body {
-            margin: 0;
+
             min-height: 100vh;
 
             font-family:
-                Inter,
-                -apple-system,
-                BlinkMacSystemFont,
-                "Segoe UI",
-                sans-serif;
+                    "Plus Jakarta Sans",
+                    Inter,
+                    -apple-system,
+                    BlinkMacSystemFont,
+                    "Segoe UI",
+                    sans-serif;
 
             background: var(--bg);
             color: var(--text);
 
             transition:
-                background 0.35s ease,
-                color 0.35s ease;
+                    background 0.35s ease,
+                    color 0.35s ease;
 
             overflow-x: hidden;
+        }
+
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+
+        button {
+            font-family: inherit;
+        }
+
+
+        /* =========================================================
+           THEME VARIABLES
+        ========================================================= */
+
+        :root {
+
+            --bg: #f6f7f9;
+
+            --surface: #ffffff;
+
+            --surface-2: #f0f1f4;
+
+            --text: #111318;
+
+            --muted: #70747d;
+
+            --border: #e2e4e8;
+
+            --border-strong: #d3d6dc;
+
+            --accent: #111318;
+
+            --accent-text: #ffffff;
+
+            --shadow:
+                    0 20px 50px rgba(0, 0, 0, 0.07);
+
+            --radius: 20px;
+        }
+
+
+        /* =========================================================
+           DARK
+        ========================================================= */
+
+        [data-theme="dark"] {
+
+            --bg: #090a0d;
+
+            --surface: #111318;
+
+            --surface-2: #181a20;
+
+            --text: #f4f5f7;
+
+            --muted: #9b9fa8;
+
+            --border: #282b32;
+
+            --border-strong: #363941;
+
+            --accent: #ffffff;
+
+            --accent-text: #08090b;
+
+            --shadow:
+                    0 20px 60px rgba(0, 0, 0, 0.35);
+        }
+
+
+        /* =========================================================
+           NOTHING
+        ========================================================= */
+
+        [data-theme="nothing"] {
+
+            --bg: #050505;
+
+            --surface: #090909;
+
+            --surface-2: #101010;
+
+            --text: #ffffff;
+
+            --muted: #999999;
+
+            --border: #303030;
+
+            --border-strong: #555555;
+
+            --accent: #ff3333;
+
+            --accent-text: #ffffff;
+
+            --shadow: none;
+
+            --radius: 4px;
+        }
+
+
+        /* =========================================================
+           NOTHING GRID
+        ========================================================= */
+
+        .nothing-grid {
+
+            position: fixed;
+
+            inset: 0;
+
+            pointer-events: none;
+
+            opacity: 0;
+
+            background-image:
+
+                    linear-gradient(
+                            rgba(255,255,255,0.035) 1px,
+                            transparent 1px
+                    ),
+
+                    linear-gradient(
+                            90deg,
+                            rgba(255,255,255,0.035) 1px,
+                            transparent 1px
+                    );
+
+            background-size: 40px 40px;
+
+            transition: opacity 0.35s ease;
+
+            z-index: 0;
+        }
+
+
+        [data-theme="nothing"] .nothing-grid {
+            opacity: 1;
         }
 
 
@@ -128,51 +300,32 @@
            BACKGROUND
         ========================================================= */
 
-        .background {
+        .background-glow {
+
             position: fixed;
-            inset: 0;
-            pointer-events: none;
-            z-index: -2;
-            overflow: hidden;
-        }
 
-        .background::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-
-            background-image:
-                linear-gradient(var(--grid) 1px, transparent 1px),
-                linear-gradient(90deg, var(--grid) 1px, transparent 1px);
-
-            background-size: 45px 45px;
-
-            opacity: 0;
-
-            transition: opacity 0.4s ease;
-        }
-
-        body.nothing .background::before {
-            opacity: 1;
-        }
-
-        .glow {
-            position: absolute;
             width: 500px;
             height: 500px;
 
             border-radius: 50%;
 
-            background: var(--accent);
-            filter: blur(150px);
-
-            opacity: 0.06;
+            background:
+                    radial-gradient(
+                            circle,
+                            rgba(80, 110, 255, 0.08),
+                            transparent 70%
+                    );
 
             top: -250px;
             right: -180px;
+
+            pointer-events: none;
+
+            z-index: 0;
         }
 
-        body.nothing .glow {
+
+        [data-theme="nothing"] .background-glow {
             display: none;
         }
 
@@ -182,56 +335,75 @@
         ========================================================= */
 
         .navbar {
+
+            position: relative;
+
+            z-index: 20;
+
             height: 76px;
 
             display: flex;
+
             align-items: center;
+
             justify-content: space-between;
 
-            padding: 0 42px;
+            padding: 0 6%;
 
             border-bottom: 1px solid var(--border);
 
-            background: var(--surface);
+            background: var(--bg);
 
             backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
-
-            position: sticky;
-            top: 0;
-            z-index: 50;
-
-            animation: navIn 0.6s ease both;
         }
+
 
         .brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
 
-            font-size: 17px;
+            display: flex;
+
+            align-items: center;
+
+            gap: 11px;
+
+            font-size: 15px;
+
             font-weight: 700;
-            letter-spacing: -0.3px;
+
+            letter-spacing: -0.2px;
         }
+
 
         .brand-dot {
-            width: 9px;
-            height: 9px;
 
-            background: var(--accent);
+            width: 10px;
+            height: 10px;
+
             border-radius: 50%;
 
-            transition: all 0.3s ease;
+            background: var(--accent);
         }
 
-        body.nothing .brand-dot {
+
+        [data-theme="nothing"] .brand-dot {
+
             border-radius: 0;
+
+            background: var(--accent);
         }
+
+
+        /* =========================================================
+           NAV RIGHT
+        ========================================================= */
 
         .nav-right {
+
             display: flex;
+
             align-items: center;
-            gap: 20px;
+
+            gap: 14px;
         }
 
 
@@ -240,59 +412,89 @@
         ========================================================= */
 
         .theme-switcher {
+
             position: relative;
 
             display: flex;
+
             align-items: center;
 
-            width: 246px;
+            width: 174px;
+
             height: 38px;
 
             padding: 3px;
 
             border: 1px solid var(--border);
-            border-radius: 100px;
 
-            background: var(--surface-solid);
+            border-radius: 999px;
+
+            background: var(--surface);
 
             overflow: hidden;
         }
 
+
+        [data-theme="nothing"] .theme-switcher {
+            border-radius: 4px;
+        }
+
+
         .theme-slider {
+
             position: absolute;
 
             top: 3px;
             left: 3px;
 
             width: calc((100% - 6px) / 3);
+
             height: 30px;
 
-            border-radius: 100px;
+            border-radius: 999px;
 
-            background: var(--accent-soft);
+            background: var(--accent);
 
             transition:
-                transform 0.35s cubic-bezier(.4,0,.2,1),
-                background 0.35s ease;
+                    transform 0.28s cubic-bezier(.4,0,.2,1);
+
+            z-index: 0;
         }
 
-        body.nothing .theme-slider {
+
+        [data-theme="nothing"] .theme-slider {
             border-radius: 2px;
-            background: var(--accent);
         }
+
+
+        [data-theme="dark"] .theme-slider {
+            transform: translateX(100%);
+        }
+
+
+        [data-theme="nothing"] .theme-slider {
+            transform: translateX(200%);
+        }
+
 
         .theme-option {
+
             position: relative;
-            z-index: 2;
 
-            width: 33.333%;
+            z-index: 1;
 
-            border: 0;
+            flex: 1;
+
+            height: 30px;
+
+            border: none;
+
             background: transparent;
 
             color: var(--muted);
 
             font-size: 11px;
+
             font-weight: 700;
 
             cursor: pointer;
@@ -300,12 +502,215 @@
             transition: color 0.25s ease;
         }
 
-        .theme-option.active {
-            color: var(--text);
+
+        [data-theme="light"]
+        .theme-option[data-theme-option="light"],
+
+        [data-theme="dark"]
+        .theme-option[data-theme-option="dark"],
+
+        [data-theme="nothing"]
+        .theme-option[data-theme-option="nothing"] {
+
+            color: var(--accent-text);
         }
 
-        body.nothing .theme-option.active {
-            color: #fff;
+
+        /* =========================================================
+           PROFILE BUTTON
+        ========================================================= */
+
+        .profile-wrapper {
+            position: relative;
+        }
+
+
+        .profile-button {
+
+            width: 40px;
+            height: 40px;
+
+            border-radius: 50%;
+
+            border: 1px solid var(--border);
+
+            background: var(--surface);
+
+            color: var(--text);
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            cursor: pointer;
+
+            font-size: 13px;
+
+            font-weight: 800;
+
+            transition:
+                    transform 0.2s ease,
+                    border-color 0.2s ease,
+                    background 0.2s ease;
+        }
+
+
+        .profile-button:hover {
+
+            transform: translateY(-1px);
+
+            border-color: var(--border-strong);
+        }
+
+
+        [data-theme="nothing"] .profile-button {
+
+            border-radius: 4px;
+
+            color: var(--accent);
+        }
+
+
+        /* =========================================================
+           PROFILE MENU
+        ========================================================= */
+
+        .profile-menu {
+
+            position: absolute;
+
+            top: calc(100% + 12px);
+
+            right: 0;
+
+            width: 250px;
+
+            padding: 10px;
+
+            border: 1px solid var(--border);
+
+            border-radius: 16px;
+
+            background: var(--surface);
+
+            box-shadow: var(--shadow);
+
+            opacity: 0;
+
+            visibility: hidden;
+
+            transform:
+                    translateY(-7px)
+                    scale(0.98);
+
+            transform-origin: top right;
+
+            transition:
+                    opacity 0.18s ease,
+                    visibility 0.18s ease,
+                    transform 0.18s ease;
+        }
+
+
+        [data-theme="nothing"] .profile-menu {
+
+            border-radius: 4px;
+
+            box-shadow: none;
+        }
+
+
+        .profile-wrapper.open .profile-menu {
+
+            opacity: 1;
+
+            visibility: visible;
+
+            transform:
+                    translateY(0)
+                    scale(1);
+        }
+
+
+        .profile-header {
+
+            padding: 12px;
+
+            border-bottom: 1px solid var(--border);
+
+            margin-bottom: 6px;
+        }
+
+
+        .profile-name {
+
+            font-size: 14px;
+
+            font-weight: 800;
+
+            white-space: nowrap;
+
+            overflow: hidden;
+
+            text-overflow: ellipsis;
+        }
+
+
+        .profile-meta {
+
+            margin-top: 4px;
+
+            font-size: 11px;
+
+            color: var(--muted);
+        }
+
+
+        .menu-item {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 11px;
+
+            width: 100%;
+
+            padding: 11px 12px;
+
+            border-radius: 10px;
+
+            font-size: 13px;
+
+            font-weight: 600;
+
+            color: var(--text);
+
+            transition:
+                    background 0.18s ease,
+                    color 0.18s ease;
+        }
+
+
+        .menu-item:hover {
+            background: var(--surface-2);
+        }
+
+
+        .menu-item.logout {
+            color: #d64545;
+        }
+
+
+        [data-theme="nothing"] .menu-item {
+            border-radius: 2px;
+        }
+
+
+        [data-theme="nothing"] .menu-item.logout {
+            color: var(--accent);
         }
 
 
@@ -313,12 +718,17 @@
            MAIN
         ========================================================= */
 
-        .container {
-            width: min(1180px, calc(100% - 40px));
+        .page {
+
+            position: relative;
+
+            z-index: 1;
+
+            width: min(1120px, 90%);
 
             margin: 0 auto;
 
-            padding: 62px 0 80px;
+            padding: 55px 0 40px;
         }
 
 
@@ -327,955 +737,1382 @@
         ========================================================= */
 
         .hero {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
 
-            gap: 30px;
-
-            margin-bottom: 38px;
-
-            animation: heroIn 0.7s 0.08s ease both;
+            animation:
+                    pageEnter 0.65s
+                    cubic-bezier(.2,.8,.2,1)
+                    both;
         }
+
+
+        @keyframes pageEnter {
+
+            from {
+
+                opacity: 0;
+
+                transform: translateY(18px);
+            }
+
+            to {
+
+                opacity: 1;
+
+                transform: translateY(0);
+            }
+        }
+
 
         .eyebrow {
-            display: flex;
+
+            display: inline-flex;
+
             align-items: center;
-            gap: 9px;
 
-            margin-bottom: 13px;
+            gap: 8px;
 
-            color: var(--accent);
+            margin-bottom: 18px;
 
-            font-size: 12px;
+            font-size: 11px;
+
             font-weight: 800;
 
-            letter-spacing: 1.8px;
+            letter-spacing: 1.5px;
+
             text-transform: uppercase;
+
+            color: var(--muted);
         }
+
 
         .eyebrow-line {
-            width: 25px;
+
+            width: 24px;
+
             height: 1px;
 
-            background: var(--accent);
-        }
-
-        .hero h1 {
-            margin: 0;
-
-            font-size: clamp(38px, 5vw, 64px);
-            line-height: 0.98;
-
-            letter-spacing: -3px;
-            font-weight: 750;
-        }
-
-        .hero h1 span {
-            color: var(--accent);
-        }
-
-        .hero-subtitle {
-            margin: 18px 0 0;
-
-            color: var(--muted);
-
-            font-size: 15px;
-            line-height: 1.6;
-        }
-
-        .student-chip {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-
-            padding: 10px 15px 10px 10px;
-
-            border: 1px solid var(--border);
-            border-radius: 100px;
-
-            background: var(--surface);
-
-            box-shadow: var(--shadow);
-
-            white-space: nowrap;
-        }
-
-        .avatar {
-            width: 36px;
-            height: 36px;
-
-            display: grid;
-            place-items: center;
-
-            border-radius: 50%;
-
-            background: var(--accent);
-            color: white;
-
-            font-size: 14px;
-            font-weight: 800;
-        }
-
-        body.nothing .avatar {
-            border-radius: 2px;
-        }
-
-        .student-chip strong {
-            display: block;
-
-            font-size: 13px;
-        }
-
-        .student-chip small {
-            color: var(--muted);
-            font-size: 11px;
+            background: var(--border-strong);
         }
 
 
         /* =========================================================
-           STATS / INFO STRIP
+           HERO TITLE
+        ========================================================= */
+
+        .hero-title {
+
+            max-width: none;
+
+            display: flex;
+
+            flex-direction: column;
+
+            white-space: nowrap;
+
+            font-family:
+                    "Plus Jakarta Sans",
+                    Inter,
+                    -apple-system,
+                    BlinkMacSystemFont,
+                    "Segoe UI",
+                    sans-serif;
+
+            font-weight: 800;
+
+            line-height: 0.98;
+
+            letter-spacing: -2.4px;
+        }
+
+
+        .hero-title .welcome-line {
+
+            display: block;
+
+            font-size: clamp(36px, 3.7vw, 48px);
+
+            color: var(--text);
+        }
+
+
+        .hero-title .name-line {
+
+            display: block;
+
+            margin-top: 5px;
+
+            font-size: clamp(40px, 4.2vw, 54px);
+
+            color: var(--accent);
+
+            letter-spacing: -2.8px;
+        }
+
+
+        .hero-description {
+
+            max-width: 600px;
+
+            margin-top: 16px;
+
+            color: var(--muted);
+
+            font-size: 13px;
+
+            line-height: 1.6;
+        }
+
+
+        [data-theme="nothing"] .hero-title {
+
+            letter-spacing: -2px;
+
+            text-transform: uppercase;
+        }
+
+
+        /* =========================================================
+           STUDENT CHIP
+        ========================================================= */
+
+        .student-chip {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            margin-top: 22px;
+
+            padding: 7px 13px 7px 7px;
+
+            border: 1px solid var(--border);
+
+            border-radius: 999px;
+
+            background: var(--surface);
+        }
+
+
+        [data-theme="nothing"] .student-chip {
+            border-radius: 4px;
+        }
+
+
+        .student-avatar {
+
+            width: 31px;
+            height: 31px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 50%;
+
+            background: var(--accent);
+
+            color: var(--accent-text);
+
+            font-size: 12px;
+
+            font-weight: 800;
+        }
+
+
+        [data-theme="nothing"] .student-avatar {
+
+            border-radius: 2px;
+
+            color: #fff;
+        }
+
+
+        .student-chip-text {
+
+            font-size: 12px;
+
+            font-weight: 700;
+        }
+
+
+        .student-chip-meta {
+
+            margin-left: 3px;
+
+            color: var(--muted);
+
+            font-weight: 500;
+        }
+
+
+        /* =========================================================
+           INFO GRID
         ========================================================= */
 
         .info-grid {
+
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
 
-            gap: 14px;
+            grid-template-columns:
+                    repeat(4, 1fr);
 
-            margin-bottom: 42px;
+            gap: 12px;
 
-            animation: riseIn 0.7s 0.16s ease both;
+            margin-top: 28px;
+
+            animation:
+                    pageEnter 0.65s
+                    0.08s
+                    cubic-bezier(.2,.8,.2,1)
+                    both;
         }
 
-        .info-card {
-            position: relative;
 
-            padding: 22px 24px;
+        .info-card {
+
+            min-height: 90px;
+
+            padding: 17px 18px;
 
             border: 1px solid var(--border);
+
             border-radius: var(--radius);
 
             background: var(--surface);
 
-            box-shadow: var(--shadow);
-
-            overflow: hidden;
-
             transition:
-                transform 0.3s ease,
-                border-color 0.3s ease;
+                    transform 0.22s ease,
+                    border-color 0.22s ease,
+                    box-shadow 0.22s ease;
         }
+
 
         .info-card:hover {
+
             transform: translateY(-3px);
-            border-color: var(--accent);
+
+            border-color: var(--border-strong);
+
+            box-shadow:
+                    0 12px 28px rgba(0, 0, 0, 0.06);
         }
 
-        body.nothing .info-card {
-            border-radius: 3px;
+
+        [data-theme="nothing"] .info-card {
+            border-radius: 4px;
         }
 
-        body.nothing .info-card:hover {
-            transform: translateY(-2px);
-        }
 
         .info-label {
-            margin-bottom: 8px;
+
+            font-size: 10px;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1.2px;
 
             color: var(--muted);
 
-            font-size: 10px;
             font-weight: 800;
-
-            letter-spacing: 1.4px;
-            text-transform: uppercase;
         }
 
+
         .info-value {
-            font-size: 16px;
-            font-weight: 650;
+
+            margin-top: 9px;
+
+            font-size: 13px;
+
+            font-weight: 700;
 
             word-break: break-word;
         }
 
 
         /* =========================================================
-           SECTION HEADER
+           ACTION SECTION
         ========================================================= */
 
         .section-heading {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
 
-            margin-bottom: 18px;
+            margin-top: 28px;
+
+            margin-bottom: 12px;
+
+            display: flex;
+
+            align-items: end;
+
+            justify-content: space-between;
         }
+
 
         .section-heading h2 {
-            margin: 0;
 
-            font-size: 22px;
+            font-size: 20px;
+
             letter-spacing: -0.7px;
+
+            font-weight: 800;
         }
 
-        .section-heading span {
+
+        .section-heading p {
+
+            font-size: 11px;
+
             color: var(--muted);
-
-            font-size: 12px;
         }
 
 
-        /* =========================================================
-           ACTION CARDS
-        ========================================================= */
+        .actions-grid {
 
-        .actions {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
 
-            gap: 18px;
+            grid-template-columns:
+                    repeat(2, 1fr);
 
-            animation: riseIn 0.7s 0.24s ease both;
+            gap: 14px;
+
+            animation:
+                    pageEnter 0.65s
+                    0.16s
+                    cubic-bezier(.2,.8,.2,1)
+                    both;
         }
+
 
         .action-card {
+
             position: relative;
 
-            min-height: 235px;
+            min-height: 190px;
 
-            padding: 30px;
-
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
+            padding: 23px;
 
             border: 1px solid var(--border);
+
             border-radius: var(--radius);
 
             background: var(--surface);
 
-            box-shadow: var(--shadow);
-
             overflow: hidden;
 
             transition:
-                transform 0.35s ease,
-                border-color 0.35s ease,
-                background 0.35s ease;
+                    transform 0.25s ease,
+                    border-color 0.25s ease,
+                    box-shadow 0.25s ease;
         }
 
-        .action-card::before {
-            content: "";
-
-            position: absolute;
-
-            width: 180px;
-            height: 180px;
-
-            right: -80px;
-            top: -80px;
-
-            border-radius: 50%;
-
-            background: var(--accent);
-
-            opacity: 0.06;
-
-            transition:
-                transform 0.4s ease,
-                opacity 0.4s ease;
-        }
 
         .action-card:hover {
-            transform: translateY(-6px);
-            border-color: var(--accent);
+
+            transform: translateY(-5px);
+
+            border-color: var(--border-strong);
+
+            box-shadow:
+                    0 16px 34px rgba(0, 0, 0, 0.08);
         }
 
-        .action-card:hover::before {
-            transform: scale(1.5);
-            opacity: 0.10;
+
+        [data-theme="nothing"] .action-card {
+            border-radius: 4px;
         }
 
-        body.nothing .action-card {
-            border-radius: 3px;
-        }
-
-        body.nothing .action-card::before {
-            width: 1px;
-            height: 100%;
-
-            right: 0;
-            top: 0;
-
-            border-radius: 0;
-
-            opacity: 0.5;
-
-            background: var(--accent);
-        }
-
-        body.nothing .action-card:hover {
-            transform: translateY(-3px);
-        }
-
-        .action-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-        }
 
         .action-number {
-            color: var(--accent);
 
-            font-size: 12px;
+            font-size: 11px;
+
             font-weight: 800;
+
+            color: var(--muted);
 
             letter-spacing: 1px;
         }
 
-        .action-symbol {
-            width: 42px;
-            height: 42px;
 
-            display: grid;
-            place-items: center;
+        .action-title {
 
-            border: 1px solid var(--border);
-            border-radius: 12px;
+            margin-top: 32px;
 
-            background: var(--accent-soft);
+            font-size: 22px;
 
-            color: var(--accent);
+            letter-spacing: -0.8px;
 
-            font-size: 18px;
-
-            transition:
-                transform 0.3s ease,
-                border-radius 0.3s ease;
+            font-weight: 800;
         }
 
-        .action-card:hover .action-symbol {
-            transform: rotate(-5deg) scale(1.05);
-        }
 
-        body.nothing .action-symbol {
-            border-radius: 2px;
-        }
+        .action-description {
 
-        .action-card h3 {
-            margin: 25px 0 8px;
+            max-width: 400px;
 
-            font-size: 25px;
-            letter-spacing: -1px;
-        }
-
-        .action-card p {
-            max-width: 390px;
-
-            margin: 0;
+            margin-top: 9px;
 
             color: var(--muted);
 
-            font-size: 14px;
-            line-height: 1.6;
+            font-size: 12px;
+
+            line-height: 1.55;
         }
 
-        .action-link {
-            display: inline-flex;
+
+        .action-arrow {
+
+            position: absolute;
+
+            right: 22px;
+
+            bottom: 20px;
+
+            width: 40px;
+            height: 40px;
+
+            display: flex;
+
             align-items: center;
-            gap: 8px;
 
-            width: fit-content;
+            justify-content: center;
 
-            margin-top: 25px;
+            border: 1px solid var(--border);
 
-            color: var(--text);
+            border-radius: 50%;
 
-            text-decoration: none;
-
-            font-size: 13px;
-            font-weight: 750;
+            font-size: 17px;
 
             transition:
-                color 0.25s ease,
-                gap 0.25s ease;
+                    transform 0.25s ease,
+                    background 0.25s ease,
+                    color 0.25s ease;
         }
 
-        .action-link::after {
-            content: "→";
+
+        .action-card:hover .action-arrow {
+
+            transform: translate(3px, -3px);
+
+            background: var(--accent);
+
+            color: var(--accent-text);
+        }
+
+
+        [data-theme="nothing"] .action-arrow {
+
+            border-radius: 2px;
 
             color: var(--accent);
-
-            transition: transform 0.25s ease;
-        }
-
-        .action-link:hover {
-            color: var(--accent);
-            gap: 13px;
-        }
-
-        .action-link:hover::after {
-            transform: translateX(3px);
         }
 
 
         /* =========================================================
-           FOOTER / LOGOUT
+           BOTTOM NOTE
         ========================================================= */
 
-        .bottom-bar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+        .bottom-note {
 
-            margin-top: 46px;
-            padding-top: 22px;
+            margin-top: 16px;
+
+            padding-top: 10px;
 
             border-top: 1px solid var(--border);
 
-            animation: riseIn 0.7s 0.32s ease both;
-        }
+            display: flex;
 
-        .bottom-note {
-            color: var(--muted);
+            justify-content: space-between;
 
-            font-size: 11px;
-        }
-
-        .logout {
-            display: inline-flex;
-            align-items: center;
-            gap: 7px;
+            gap: 20px;
 
             color: var(--muted);
 
-            text-decoration: none;
-
-            font-size: 12px;
-            font-weight: 700;
-
-            transition: color 0.25s ease;
-        }
-
-        .logout:hover {
-            color: var(--danger);
+            font-size: 10px;
         }
 
 
         /* =========================================================
-           NOTHING MODE
+           DESKTOP — NO SCROLL
         ========================================================= */
 
-        body.nothing .navbar {
-            backdrop-filter: none;
-            -webkit-backdrop-filter: none;
-            background: #050505;
-        }
+        @media (min-width: 851px) {
 
-        body.nothing .hero h1 {
-            text-transform: uppercase;
-            letter-spacing: -3px;
-        }
+            html,
+            body {
 
-        body.nothing .section-heading h2,
-        body.nothing .action-card h3 {
-            text-transform: uppercase;
-            letter-spacing: -0.5px;
-        }
+                height: 100vh;
 
-        body.nothing .info-label,
-        body.nothing .eyebrow {
-            letter-spacing: 2px;
-        }
+                min-height: 100vh;
 
-        body.nothing .action-link::after {
-            content: "↗";
-        }
-
-
-        /* =========================================================
-           ANIMATIONS
-        ========================================================= */
-
-        @keyframes navIn {
-            from {
-                opacity: 0;
-                transform: translateY(-12px);
+                overflow: hidden;
             }
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
 
-        @keyframes heroIn {
-            from {
-                opacity: 0;
-                transform: translateY(18px);
-            }
+            .page {
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+                width: min(1180px, 92%);
 
-        @keyframes riseIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
+                height: calc(100vh - 76px);
+
+                padding: 25px 0 14px;
+
+                display: flex;
+
+                flex-direction: column;
+
+                justify-content: space-between;
             }
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-
-        /* =========================================================
-           RESPONSIVE
-        ========================================================= */
-
-        @media (max-width: 800px) {
-
-            .navbar {
-                padding: 0 20px;
-            }
-
-            .nav-right {
-                gap: 10px;
-            }
-
-            .theme-switcher {
-                width: 210px;
-            }
-
-            .container {
-                width: min(100% - 28px, 650px);
-                padding-top: 42px;
-            }
 
             .hero {
-                align-items: flex-start;
-                flex-direction: column;
+                flex: 0 0 auto;
             }
+
+
+            .hero-description {
+
+                margin-top: 12px;
+
+                font-size: 12px;
+
+                line-height: 1.5;
+            }
+
 
             .student-chip {
-                width: 100%;
+                margin-top: 16px;
             }
+
 
             .info-grid {
-                grid-template-columns: 1fr;
+                margin-top: 20px;
             }
 
-            .actions {
+
+            .info-card {
+
+                min-height: 72px;
+
+                padding: 13px 17px;
+            }
+
+
+            .info-value {
+
+                margin-top: 7px;
+
+                font-size: 12px;
+            }
+
+
+            .section-heading {
+
+                margin-top: 17px;
+
+                margin-bottom: 9px;
+            }
+
+
+            .actions-grid {
+
+                flex: 1;
+
+                min-height: 0;
+            }
+
+
+            .action-card {
+
+                min-height: 0;
+
+                height: 100%;
+
+                padding: 20px;
+            }
+
+
+            .action-title {
+
+                margin-top: 25px;
+
+                font-size: 20px;
+            }
+
+
+            .action-description {
+
+                font-size: 11px;
+
+                line-height: 1.5;
+            }
+
+
+            .bottom-note {
+
+                margin-top: 9px;
+
+                padding-top: 7px;
+            }
+        }
+
+
+        /* =========================================================
+           SHORT LAPTOP
+        ========================================================= */
+
+        @media (min-width: 851px) and (max-height: 800px) {
+
+            .page {
+
+                padding-top: 16px;
+
+                padding-bottom: 8px;
+            }
+
+
+            .hero-title .welcome-line {
+                font-size: 34px;
+            }
+
+
+            .hero-title .name-line {
+                font-size: 41px;
+            }
+
+
+            .hero-description {
+
+                margin-top: 7px;
+
+                font-size: 11px;
+            }
+
+
+            .student-chip {
+                margin-top: 10px;
+            }
+
+
+            .info-grid {
+                margin-top: 13px;
+            }
+
+
+            .info-card {
+
+                min-height: 62px;
+
+                padding: 10px 14px;
+            }
+
+
+            .section-heading {
+                margin-top: 11px;
+            }
+
+
+            .action-card {
+                padding: 16px;
+            }
+
+
+            .action-title {
+
+                margin-top: 18px;
+
+                font-size: 18px;
+            }
+
+
+            .bottom-note {
+
+                margin-top: 6px;
+
+                padding-top: 6px;
+            }
+        }
+
+
+        /* =========================================================
+           MOBILE
+        ========================================================= */
+
+        @media (max-width: 850px) {
+
+            .hero-title {
+                white-space: normal;
+            }
+
+
+            .hero-title .welcome-line {
+                font-size: 38px;
+            }
+
+
+            .hero-title .name-line {
+                font-size: 44px;
+            }
+
+
+            .info-grid {
+
+                grid-template-columns:
+                        repeat(2, 1fr);
+
+                margin-top: 35px;
+            }
+
+
+            .actions-grid {
+
                 grid-template-columns: 1fr;
             }
         }
 
-        @media (max-width: 560px) {
+
+        @media (max-width: 650px) {
 
             .navbar {
-                height: auto;
-                min-height: 70px;
-
-                padding: 15px;
-
-                gap: 14px;
-                flex-direction: column;
-                align-items: stretch;
+                height: 68px;
             }
+
 
             .brand {
-                justify-content: center;
+                font-size: 13px;
             }
 
-            .nav-right {
-                justify-content: center;
-            }
 
             .theme-switcher {
-                width: 100%;
+                width: 145px;
             }
 
-            .hero h1 {
-                font-size: 42px;
-                letter-spacing: -2px;
+
+            .profile-button {
+
+                width: 37px;
+                height: 37px;
             }
 
-            .action-card {
-                min-height: 220px;
-                padding: 24px;
+
+            .page {
+
+                width: 92%;
+
+                padding:
+                        40px 0
+                        35px;
             }
 
-            .bottom-bar {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 15px;
+
+            .hero-title .welcome-line {
+                font-size: 34px;
             }
+
+
+            .hero-title .name-line {
+                font-size: 39px;
+            }
+
+
+            .info-grid {
+
+                grid-template-columns: 1fr;
+
+                margin-top: 35px;
+            }
+
+
+            .section-heading {
+                display: block;
+            }
+
+
+            .section-heading p {
+                margin-top: 6px;
+            }
+
+
+            .bottom-note {
+
+                display: block;
+
+                line-height: 1.6;
+            }
+        }
+
+
+        @media (max-width: 480px) {
+
+            .nav-right {
+                gap: 7px;
+            }
+
+
+            .theme-switcher {
+                width: 132px;
+            }
+
+
+            .theme-option {
+                font-size: 9px;
+            }
+
+
+            .profile-menu {
+                right: -5px;
+            }
+        }
+
+
+        /* =========================================================
+           NOTHING THEME
+        ========================================================= */
+
+        [data-theme="nothing"] .hero-title .welcome-line {
+
+            text-transform: uppercase;
+
+            color: var(--text);
+        }
+
+
+        [data-theme="nothing"] .hero-title .name-line {
+
+            text-transform: uppercase;
+
+            color: var(--accent);
         }
 
     </style>
+
 </head>
 
 
 <body>
 
-<div class="background">
-    <div class="glow"></div>
-</div>
+    <div class="nothing-grid"></div>
+
+    <div class="background-glow"></div>
 
 
-<!-- =========================================================
-     NAVBAR
-========================================================= -->
+    <!-- =========================================================
+         NAVBAR
+    ========================================================= -->
 
-<nav class="navbar">
+    <nav class="navbar">
 
-    <div class="brand">
-        <span class="brand-dot"></span>
-        College Event Portal
-    </div>
+        <a
+                href="student-dashboard.jsp"
+                class="brand"
+        >
 
-    <div class="nav-right">
+            <span class="brand-dot"></span>
 
-        <div class="theme-switcher">
+            <span>College Event Portal</span>
 
-            <div class="theme-slider"></div>
+        </a>
 
-            <button
-                type="button"
-                class="theme-option"
-                data-theme-option="light">
-                ☀ Light
-            </button>
 
-            <button
-                type="button"
-                class="theme-option"
-                data-theme-option="dark">
-                ◐ Dark
-            </button>
+        <div class="nav-right">
 
-            <button
-                type="button"
-                class="theme-option"
-                data-theme-option="nothing">
-                ◉ Nothing
-            </button>
+
+            <!-- Theme -->
+
+            <div class="theme-switcher">
+
+                <div class="theme-slider"></div>
+
+
+                <button
+                        type="button"
+                        class="theme-option"
+                        data-theme-option="light"
+                >
+                    Light
+                </button>
+
+
+                <button
+                        type="button"
+                        class="theme-option"
+                        data-theme-option="dark"
+                >
+                    Dark
+                </button>
+
+
+                <button
+                        type="button"
+                        class="theme-option"
+                        data-theme-option="nothing"
+                >
+                    Nothing
+                </button>
+
+            </div>
+
+
+            <!-- Profile -->
+
+            <div
+                    class="profile-wrapper"
+                    id="profileWrapper"
+            >
+
+                <button
+                        type="button"
+                        class="profile-button"
+                        id="profileButton"
+                        aria-label="Open profile menu"
+                >
+                    <%= initial %>
+                </button>
+
+
+                <div
+                        class="profile-menu"
+                        id="profileMenu"
+                >
+
+                    <div class="profile-header">
+
+                        <div class="profile-name">
+                            <%= studentName %>
+                        </div>
+
+                        <div class="profile-meta">
+
+                            <%= department %>
+
+                            <% if (!"Not set".equals(year)) { %>
+                                · <%= year %>
+                            <% } %>
+
+                        </div>
+
+                    </div>
+
+
+                    <a
+                            href="student-profile.jsp"
+                            class="menu-item"
+                    >
+
+                        <span>◉</span>
+
+                        <span>Profile</span>
+
+                    </a>
+
+
+                    <a
+                            href="logout"
+                            class="menu-item logout"
+                    >
+
+                        <span>↪</span>
+
+                        <span>Logout</span>
+
+                    </a>
+
+                </div>
+
+            </div>
 
         </div>
 
-    </div>
-
-</nav>
+    </nav>
 
 
-<!-- =========================================================
-     MAIN CONTENT
-========================================================= -->
+    <!-- =========================================================
+         MAIN
+    ========================================================= -->
 
-<main class="container">
+    <main class="page">
 
 
-    <!-- HERO -->
+        <!-- HERO -->
 
-    <section class="hero">
-
-        <div>
+        <section class="hero">
 
             <div class="eyebrow">
+
                 <span class="eyebrow-line"></span>
+
                 Student Dashboard
+
             </div>
 
-            <h1>
-                Welcome,<br>
-                <span><%= student.getName() %></span>
+
+            <h1 class="hero-title">
+
+                <span class="welcome-line">
+                    Welcome back,
+                </span>
+
+                <span class="name-line">
+                    <%= studentName %>.
+                </span>
+
             </h1>
 
-            <p class="hero-subtitle">
-                Manage your college events and registrations
-                from one place.
+
+            <p class="hero-description">
+
+                Manage your college events, registrations,
+                and student profile from one place.
+
+            </p>
+
+
+            <div class="student-chip">
+
+                <div class="student-avatar">
+                    <%= initial %>
+                </div>
+
+
+                <div class="student-chip-text">
+
+                    <%= studentName %>
+
+                    <span class="student-chip-meta">
+                        · Student
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             STUDENT INFO
+        ====================================================== -->
+
+        <section class="info-grid">
+
+
+            <div class="info-card">
+
+                <div class="info-label">
+                    Email
+                </div>
+
+                <div class="info-value">
+                    <%= email %>
+                </div>
+
+            </div>
+
+
+            <div class="info-card">
+
+                <div class="info-label">
+                    Department
+                </div>
+
+                <div class="info-value">
+                    <%= department %>
+                </div>
+
+            </div>
+
+
+            <div class="info-card">
+
+                <div class="info-label">
+                    Year
+                </div>
+
+                <div class="info-value">
+                    <%= year %>
+                </div>
+
+            </div>
+
+
+            <div class="info-card">
+
+                <div class="info-label">
+                    Phone
+                </div>
+
+                <div class="info-value">
+                    <%= phone %>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             ACTIONS
+        ====================================================== -->
+
+        <div class="section-heading">
+
+            <div>
+
+                <h2>
+                    What would you like to do?
+                </h2>
+
+            </div>
+
+
+            <p>
+                Choose an option to continue
             </p>
 
         </div>
 
 
-        <div class="student-chip">
-
-            <div class="avatar">
-                <%= student.getName().substring(0, 1).toUpperCase() %>
-            </div>
-
-            <div>
-                <strong><%= student.getName() %></strong>
-                <small><%= student.getDepartment() %></small>
-            </div>
-
-        </div>
-
-    </section>
+        <section class="actions-grid">
 
 
-    <!-- STUDENT INFORMATION -->
-
-    <div class="info-grid">
-
-        <div class="info-card">
-
-            <div class="info-label">
-                Email
-            </div>
-
-            <div class="info-value">
-                <%= student.getEmail() %>
-            </div>
-
-        </div>
-
-
-        <div class="info-card">
-
-            <div class="info-label">
-                Department
-            </div>
-
-            <div class="info-value">
-                <%= student.getDepartment() %>
-            </div>
-
-        </div>
-
-
-        <div class="info-card">
-
-            <div class="info-label">
-                Phone
-            </div>
-
-            <div class="info-value">
-                <%= student.getPhone() %>
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- ACTIONS -->
-
-    <div class="section-heading">
-
-        <h2>
-            Your Portal
-        </h2>
-
-        <span>
-            Choose an action
-        </span>
-
-    </div>
-
-
-    <div class="actions">
-
-
-        <!-- EVENTS -->
-
-        <article class="action-card">
-
-            <div>
-
-                <div class="action-top">
-
-                    <span class="action-number">
-                        01
-                    </span>
-
-                    <div class="action-symbol">
-                        ◇
-                    </div>
-
-                </div>
-
-                <h3>
-                    Events
-                </h3>
-
-                <p>
-                    Discover upcoming college events,
-                    workshops, activities and opportunities
-                    available to students.
-                </p>
-
-            </div>
-
+            <!-- EVENTS -->
 
             <a
-                href="events"
-                class="action-link">
-                View Events
-            </a>
+                    href="events"
+                    class="action-card"
+            >
 
-        </article>
-
-
-        <!-- REGISTRATIONS -->
-
-        <article class="action-card">
-
-            <div>
-
-                <div class="action-top">
-
-                    <span class="action-number">
-                        02
-                    </span>
-
-                    <div class="action-symbol">
-                        ✓
-                    </div>
-
+                <div class="action-number">
+                    01
                 </div>
 
-                <h3>
-                    Registrations
-                </h3>
 
-                <p>
-                    Keep track of the events you have
-                    registered for and review your
-                    registration details.
+                <div class="action-title">
+                    Browse Events
+                </div>
+
+
+                <p class="action-description">
+
+                    Explore upcoming college events,
+                    workshops and activities available
+                    for registration.
+
                 </p>
 
-            </div>
 
+                <div class="action-arrow">
+                    →
+                </div>
 
-            <a
-                href="my-registrations"
-                class="action-link">
-                My Registrations
             </a>
 
-        </article>
+
+            <!-- REGISTRATIONS -->
+
+            <a
+                    href="my-registrations"
+                    class="action-card"
+            >
+
+                <div class="action-number">
+                    02
+                </div>
 
 
-    </div>
+                <div class="action-title">
+                    My Registrations
+                </div>
 
 
-    <!-- BOTTOM -->
+                <p class="action-description">
 
-    <div class="bottom-bar">
+                    View the events you have registered for
+                    and keep track of your participation.
+
+                </p>
+
+
+                <div class="action-arrow">
+                    →
+                </div>
+
+            </a>
+
+
+        </section>
+
+
+        <!-- =====================================================
+             BOTTOM NOTE
+        ====================================================== -->
 
         <div class="bottom-note">
-            College Event Management Portal
+
+            <span>
+                College Event Management Portal
+            </span>
+
+            <span>
+                Student access
+            </span>
+
         </div>
 
-        <a
-            href="logout"
-            class="logout">
-            Log out →
-        </a>
 
-    </div>
-
-</main>
+    </main>
 
 
-<!-- =========================================================
-     THEME ENGINE
-========================================================= -->
+    <!-- =========================================================
+         THEME + PROFILE JS
+    ========================================================= -->
 
-<script>
+    <script>
 
-    const themeOptions =
-        document.querySelectorAll(".theme-option");
+        const root = document.documentElement;
 
-    const themeSlider =
-        document.querySelector(".theme-slider");
-
-    const body =
-        document.body;
-
-
-    function applyTheme(theme) {
-
-        body.classList.remove(
+        const themes = [
+            "light",
             "dark",
             "nothing"
-        );
+        ];
 
 
-        if (theme === "dark") {
-            body.classList.add("dark");
-        }
+        /* =====================================================
+           THEME
+        ===================================================== */
 
-        if (theme === "nothing") {
-            body.classList.add("nothing");
-        }
+        function setTheme(theme) {
 
-
-        let position = 0;
-
-        if (theme === "dark") {
-            position = 1;
-        }
-
-        if (theme === "nothing") {
-            position = 2;
-        }
+            if (!themes.includes(theme)) {
+                theme = "light";
+            }
 
 
-        themeSlider.style.transform =
-            `translateX(${position * 100}%)`;
-
-
-        themeOptions.forEach(option => {
-
-            option.classList.toggle(
-                "active",
-                option.dataset.themeOption === theme
+            root.setAttribute(
+                    "data-theme",
+                    theme
             );
 
-        });
+
+            localStorage.setItem(
+                    "portal-theme",
+                    theme
+            );
 
 
-        localStorage.setItem(
-            "portal-theme",
-            theme
+            document
+                    .querySelectorAll(".theme-option")
+                    .forEach(button => {
+
+                        button.classList.toggle(
+                                "active",
+                                button.dataset.themeOption === theme
+                        );
+
+                    });
+
+        }
+
+
+        document
+                .querySelectorAll(".theme-option")
+                .forEach(button => {
+
+                    button.addEventListener(
+                            "click",
+                            function () {
+
+                                setTheme(
+                                        this.dataset.themeOption
+                                );
+
+                            }
+                    );
+
+                });
+
+
+        const savedTheme =
+                localStorage.getItem("portal-theme");
+
+
+        setTheme(
+
+                themes.includes(savedTheme)
+                        ? savedTheme
+                        : "light"
+
         );
-    }
 
 
-    themeOptions.forEach(option => {
+        /* =====================================================
+           PROFILE MENU
+        ===================================================== */
 
-        option.addEventListener(
-            "click",
-            () => {
+        const profileWrapper =
+                document.getElementById("profileWrapper");
 
-                applyTheme(
-                    option.dataset.themeOption
-                );
 
-            }
+        const profileButton =
+                document.getElementById("profileButton");
+
+
+        profileButton.addEventListener(
+                "click",
+                function (event) {
+
+                    event.stopPropagation();
+
+                    profileWrapper.classList.toggle(
+                            "open"
+                    );
+
+                }
         );
 
-    });
+
+        document.addEventListener(
+                "click",
+                function (event) {
+
+                    if (
+                            !profileWrapper.contains(
+                                    event.target
+                            )
+                    ) {
+
+                        profileWrapper.classList.remove(
+                                "open"
+                        );
+
+                    }
+
+                }
+        );
 
 
-    const savedTheme =
-        localStorage.getItem("portal-theme")
-        || "light";
+        document.addEventListener(
+                "keydown",
+                function (event) {
 
+                    if (event.key === "Escape") {
 
-    applyTheme(savedTheme);
+                        profileWrapper.classList.remove(
+                                "open"
+                        );
 
-</script>
+                    }
+
+                }
+        );
+
+    </script>
 
 
 </body>
+
 </html>
