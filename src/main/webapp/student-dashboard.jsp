@@ -18,10 +18,7 @@
         return;
     }
 
-    response.setHeader(
-            "Cache-Control",
-            "no-cache, no-store, must-revalidate"
-    );
+    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
     response.setHeader("Pragma", "no-cache");
     response.setHeader("Expires", "0");
 
@@ -69,12 +66,9 @@
 
     <title>Student Dashboard | College Event Portal</title>
 
-
     <!-- Prevent theme flash -->
-
     <script>
         (function () {
-
             const savedTheme =
                     localStorage.getItem("portal-theme");
 
@@ -83,20 +77,15 @@
                     savedTheme === "dark" ||
                     savedTheme === "nothing"
             ) {
-
                 document.documentElement.setAttribute(
                         "data-theme",
                         savedTheme
                 );
-
             }
-
         })();
     </script>
 
-
     <!-- Font -->
-
     <link
             rel="preconnect"
             href="https://fonts.googleapis.com"
@@ -113,7 +102,6 @@
             rel="stylesheet"
     >
 
-
     <style>
 
         /* =========================================================
@@ -126,16 +114,13 @@
             padding: 0;
         }
 
-
-        html {
-            scroll-behavior: smooth;
+        html,
+        body {
+            width: 100%;
+            min-height: 100%;
         }
 
-
         body {
-
-            min-height: 100vh;
-
             font-family:
                     "Plus Jakarta Sans",
                     Inter,
@@ -147,19 +132,17 @@
             background: var(--bg);
             color: var(--text);
 
-            transition:
-                    background 0.35s ease,
-                    color 0.35s ease;
-
             overflow-x: hidden;
-        }
 
+            transition:
+                    background 0.3s ease,
+                    color 0.3s ease;
+        }
 
         a {
             color: inherit;
             text-decoration: none;
         }
-
 
         button {
             font-family: inherit;
@@ -171,84 +154,84 @@
         ========================================================= */
 
         :root {
-
-            --bg: #f6f7f9;
-
+            --bg: #f6f7fb;
             --surface: #ffffff;
+            --surface-2: #f0f2f7;
 
-            --surface-2: #f0f1f4;
+            --text: #151720;
+            --muted: #777d8d;
 
-            --text: #111318;
+            --border: #e1e4ec;
+            --border-strong: #d2d6e0;
 
-            --muted: #70747d;
+            --accent: #635bff;
+            --accent-2: #8b5cf6;
+            --accent-soft: #eeecff;
 
-            --border: #e2e4e8;
-
-            --border-strong: #d3d6dc;
-
-            --accent: #111318;
-
-            --accent-text: #ffffff;
+            --blue: #3b82f6;
+            --green: #10b981;
+            --orange: #f59e0b;
+            --pink: #ec4899;
 
             --shadow:
-                    0 20px 50px rgba(0, 0, 0, 0.07);
+                    0 12px 30px rgba(28, 35, 60, 0.07);
 
-            --radius: 20px;
+            --radius: 16px;
         }
 
 
         /* =========================================================
-           DARK
+           DARK THEME
         ========================================================= */
 
         [data-theme="dark"] {
+            --bg: #08090d;
+            --surface: #111319;
+            --surface-2: #181b23;
 
-            --bg: #090a0d;
+            --text: #f4f5f8;
+            --muted: #969ca9;
 
-            --surface: #111318;
+            --border: #262a34;
+            --border-strong: #363b48;
 
-            --surface-2: #181a20;
+            --accent: #8178ff;
+            --accent-2: #a78bfa;
+            --accent-soft: #1d1b35;
 
-            --text: #f4f5f7;
-
-            --muted: #9b9fa8;
-
-            --border: #282b32;
-
-            --border-strong: #363941;
-
-            --accent: #ffffff;
-
-            --accent-text: #08090b;
+            --blue: #60a5fa;
+            --green: #34d399;
+            --orange: #fbbf24;
+            --pink: #f472b6;
 
             --shadow:
-                    0 20px 60px rgba(0, 0, 0, 0.35);
+                    0 15px 40px rgba(0, 0, 0, 0.3);
         }
 
 
         /* =========================================================
-           NOTHING
+           NOTHING THEME
         ========================================================= */
 
         [data-theme="nothing"] {
-
-            --bg: #050505;
-
-            --surface: #090909;
-
-            --surface-2: #101010;
+            --bg: #080808;
+            --surface: #0d0d0d;
+            --surface-2: #141414;
 
             --text: #ffffff;
-
-            --muted: #999999;
+            --muted: #969696;
 
             --border: #303030;
-
             --border-strong: #555555;
 
-            --accent: #ff3333;
+            --accent: #ff3030;
+            --accent-2: #ff3030;
+            --accent-soft: #281010;
 
-            --accent-text: #ffffff;
+            --blue: #ff3030;
+            --green: #ff3030;
+            --orange: #ff3030;
+            --pink: #ff3030;
 
             --shadow: none;
 
@@ -257,13 +240,72 @@
 
 
         /* =========================================================
+           BACKGROUND GRAPHICS
+        ========================================================= */
+
+        .background-glow {
+            position: fixed;
+
+            width: 430px;
+            height: 430px;
+
+            right: -170px;
+            top: -190px;
+
+            border-radius: 50%;
+
+            background:
+                    radial-gradient(
+                            circle,
+                            rgba(99, 91, 255, 0.14),
+                            transparent 68%
+                    );
+
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .background-glow::after {
+            content: "";
+
+            position: absolute;
+
+            width: 250px;
+            height: 250px;
+
+            left: -500px;
+            top: 450px;
+
+            border-radius: 50%;
+
+            background:
+                    radial-gradient(
+                            circle,
+                            rgba(59, 130, 246, 0.08),
+                            transparent 70%
+                    );
+        }
+
+        [data-theme="dark"] .background-glow {
+            background:
+                    radial-gradient(
+                            circle,
+                            rgba(129, 120, 255, 0.12),
+                            transparent 68%
+                    );
+        }
+
+        [data-theme="nothing"] .background-glow {
+            display: none;
+        }
+
+
+        /* =========================================================
            NOTHING GRID
         ========================================================= */
 
         .nothing-grid {
-
             position: fixed;
-
             inset: 0;
 
             pointer-events: none;
@@ -271,62 +313,23 @@
             opacity: 0;
 
             background-image:
-
                     linear-gradient(
-                            rgba(255,255,255,0.035) 1px,
+                            rgba(255, 255, 255, 0.035) 1px,
                             transparent 1px
                     ),
-
                     linear-gradient(
                             90deg,
-                            rgba(255,255,255,0.035) 1px,
+                            rgba(255, 255, 255, 0.035) 1px,
                             transparent 1px
                     );
 
-            background-size: 40px 40px;
-
-            transition: opacity 0.35s ease;
+            background-size: 32px 32px;
 
             z-index: 0;
         }
-
 
         [data-theme="nothing"] .nothing-grid {
             opacity: 1;
-        }
-
-
-        /* =========================================================
-           BACKGROUND
-        ========================================================= */
-
-        .background-glow {
-
-            position: fixed;
-
-            width: 500px;
-            height: 500px;
-
-            border-radius: 50%;
-
-            background:
-                    radial-gradient(
-                            circle,
-                            rgba(80, 110, 255, 0.08),
-                            transparent 70%
-                    );
-
-            top: -250px;
-            right: -180px;
-
-            pointer-events: none;
-
-            z-index: 0;
-        }
-
-
-        [data-theme="nothing"] .background-glow {
-            display: none;
         }
 
 
@@ -335,61 +338,53 @@
         ========================================================= */
 
         .navbar {
-
             position: relative;
-
             z-index: 20;
 
-            height: 76px;
+            height: 64px;
 
             display: flex;
-
             align-items: center;
-
             justify-content: space-between;
 
-            padding: 0 6%;
+            padding: 0 5.5%;
 
             border-bottom: 1px solid var(--border);
 
             background: var(--bg);
-
-            backdrop-filter: blur(18px);
         }
-
 
         .brand {
-
             display: flex;
-
             align-items: center;
+            gap: 10px;
 
-            gap: 11px;
+            font-size: 13px;
+            font-weight: 800;
 
-            font-size: 15px;
-
-            font-weight: 700;
-
-            letter-spacing: -0.2px;
+            letter-spacing: -0.25px;
         }
 
-
         .brand-dot {
-
-            width: 10px;
-            height: 10px;
+            width: 8px;
+            height: 8px;
 
             border-radius: 50%;
 
             background: var(--accent);
+
+            box-shadow:
+                    0 0 14px
+                    color-mix(
+                            in srgb,
+                            var(--accent) 55%,
+                            transparent
+                    );
         }
 
-
         [data-theme="nothing"] .brand-dot {
-
             border-radius: 0;
-
-            background: var(--accent);
+            box-shadow: none;
         }
 
 
@@ -398,12 +393,9 @@
         ========================================================= */
 
         .nav-right {
-
             display: flex;
-
             align-items: center;
-
-            gap: 14px;
+            gap: 12px;
         }
 
 
@@ -412,21 +404,17 @@
         ========================================================= */
 
         .theme-switcher {
-
             position: relative;
 
+            width: 171px;
+            height: 36px;
+
             display: flex;
-
             align-items: center;
-
-            width: 174px;
-
-            height: 38px;
 
             padding: 3px;
 
             border: 1px solid var(--border);
-
             border-radius: 999px;
 
             background: var(--surface);
@@ -434,74 +422,61 @@
             overflow: hidden;
         }
 
-
         [data-theme="nothing"] .theme-switcher {
             border-radius: 4px;
         }
 
-
         .theme-slider {
-
             position: absolute;
 
             top: 3px;
             left: 3px;
 
             width: calc((100% - 6px) / 3);
-
-            height: 30px;
+            height: 28px;
 
             border-radius: 999px;
 
             background: var(--accent);
 
             transition:
-                    transform 0.28s cubic-bezier(.4,0,.2,1);
+                    transform 0.25s
+                    cubic-bezier(.4, 0, .2, 1);
 
             z-index: 0;
         }
-
 
         [data-theme="nothing"] .theme-slider {
             border-radius: 2px;
         }
 
-
         [data-theme="dark"] .theme-slider {
             transform: translateX(100%);
         }
-
 
         [data-theme="nothing"] .theme-slider {
             transform: translateX(200%);
         }
 
-
         .theme-option {
-
             position: relative;
-
             z-index: 1;
 
             flex: 1;
+            height: 28px;
 
-            height: 30px;
-
-            border: none;
-
+            border: 0;
             background: transparent;
 
             color: var(--muted);
 
-            font-size: 11px;
-
+            font-size: 10px;
             font-weight: 700;
 
             cursor: pointer;
 
-            transition: color 0.25s ease;
+            transition: color 0.2s ease;
         }
-
 
         [data-theme="light"]
         .theme-option[data-theme-option="light"],
@@ -511,101 +486,74 @@
 
         [data-theme="nothing"]
         .theme-option[data-theme-option="nothing"] {
-
-            color: var(--accent-text);
+            color: #ffffff;
         }
 
 
         /* =========================================================
-           PROFILE BUTTON
+           PROFILE
         ========================================================= */
 
         .profile-wrapper {
             position: relative;
         }
 
-
         .profile-button {
-
-            width: 40px;
-            height: 40px;
-
-            border-radius: 50%;
-
-            border: 1px solid var(--border);
-
-            background: var(--surface);
-
-            color: var(--text);
+            width: 36px;
+            height: 36px;
 
             display: flex;
-
             align-items: center;
-
             justify-content: center;
+
+            border: 1px solid var(--border);
+            border-radius: 50%;
+
+            background: var(--surface);
+            color: var(--text);
+
+            font-size: 11px;
+            font-weight: 800;
 
             cursor: pointer;
 
-            font-size: 13px;
-
-            font-weight: 800;
-
             transition:
                     transform 0.2s ease,
-                    border-color 0.2s ease,
-                    background 0.2s ease;
+                    border-color 0.2s ease;
         }
 
-
         .profile-button:hover {
-
             transform: translateY(-1px);
-
             border-color: var(--border-strong);
         }
 
-
         [data-theme="nothing"] .profile-button {
-
-            border-radius: 4px;
-
+            border-radius: 3px;
             color: var(--accent);
         }
 
-
-        /* =========================================================
-           PROFILE MENU
-        ========================================================= */
-
         .profile-menu {
-
             position: absolute;
 
-            top: calc(100% + 12px);
-
+            top: calc(100% + 10px);
             right: 0;
 
-            width: 250px;
+            width: 220px;
 
-            padding: 10px;
+            padding: 8px;
 
             border: 1px solid var(--border);
-
-            border-radius: 16px;
+            border-radius: 14px;
 
             background: var(--surface);
-
             box-shadow: var(--shadow);
 
             opacity: 0;
-
             visibility: hidden;
 
             transform:
-                    translateY(-7px)
+                    translateY(-6px)
                     scale(0.98);
-
-            transform-origin: top right;
 
             transition:
                     opacity 0.18s ease,
@@ -613,19 +561,8 @@
                     transform 0.18s ease;
         }
 
-
-        [data-theme="nothing"] .profile-menu {
-
-            border-radius: 4px;
-
-            box-shadow: none;
-        }
-
-
         .profile-wrapper.open .profile-menu {
-
             opacity: 1;
-
             visibility: visible;
 
             transform:
@@ -633,81 +570,67 @@
                     scale(1);
         }
 
+        [data-theme="nothing"] .profile-menu {
+            border-radius: 3px;
+            box-shadow: none;
+        }
 
         .profile-header {
-
-            padding: 12px;
+            padding: 10px 11px;
 
             border-bottom: 1px solid var(--border);
 
-            margin-bottom: 6px;
+            margin-bottom: 5px;
         }
 
-
         .profile-name {
-
-            font-size: 14px;
-
+            font-size: 12px;
             font-weight: 800;
 
             white-space: nowrap;
-
             overflow: hidden;
-
             text-overflow: ellipsis;
         }
 
-
         .profile-meta {
+            margin-top: 3px;
 
-            margin-top: 4px;
-
-            font-size: 11px;
-
+            font-size: 9px;
             color: var(--muted);
         }
 
-
         .menu-item {
-
             display: flex;
-
             align-items: center;
-
-            gap: 11px;
+            gap: 9px;
 
             width: 100%;
 
-            padding: 11px 12px;
+            padding: 9px 10px;
 
-            border-radius: 10px;
-
-            font-size: 13px;
-
-            font-weight: 600;
+            border-radius: 8px;
 
             color: var(--text);
+
+            font-size: 11px;
+            font-weight: 600;
 
             transition:
                     background 0.18s ease,
                     color 0.18s ease;
         }
 
-
         .menu-item:hover {
             background: var(--surface-2);
         }
 
-
         .menu-item.logout {
-            color: #d64545;
+            color: #e25555;
         }
-
 
         [data-theme="nothing"] .menu-item {
             border-radius: 2px;
         }
-
 
         [data-theme="nothing"] .menu-item.logout {
             color: var(--accent);
@@ -715,20 +638,30 @@
 
 
         /* =========================================================
-           MAIN
+           MAIN PAGE
         ========================================================= */
 
         .page {
-
             position: relative;
-
             z-index: 1;
 
-            width: min(1120px, 90%);
+            width: min(1160px, 89%);
+
+            height: calc(100vh - 64px);
 
             margin: 0 auto;
 
-            padding: 55px 0 40px;
+            padding: 20px 0 10px;
+
+            display: grid;
+
+            grid-template-rows:
+                    auto
+                    auto
+                    1fr
+                    auto;
+
+            gap: 12px;
         }
 
 
@@ -737,61 +670,48 @@
         ========================================================= */
 
         .hero {
-
             animation:
-                    pageEnter 0.65s
-                    cubic-bezier(.2,.8,.2,1)
+                    pageEnter 0.55s
+                    cubic-bezier(.2, .8, .2, 1)
                     both;
         }
-
 
         @keyframes pageEnter {
 
             from {
-
                 opacity: 0;
-
-                transform: translateY(18px);
+                transform: translateY(12px);
             }
 
             to {
-
                 opacity: 1;
-
                 transform: translateY(0);
             }
         }
 
-
         .eyebrow {
-
-            display: inline-flex;
-
+            display: flex;
             align-items: center;
+            gap: 7px;
 
-            gap: 8px;
+            margin-bottom: 7px;
 
-            margin-bottom: 18px;
-
-            font-size: 11px;
-
+            font-size: 8px;
             font-weight: 800;
 
-            letter-spacing: 1.5px;
-
             text-transform: uppercase;
+            letter-spacing: 1.5px;
 
             color: var(--muted);
         }
 
-
         .eyebrow-line {
+            width: 20px;
+            height: 2px;
 
-            width: 24px;
+            border-radius: 2px;
 
-            height: 1px;
-
-            background: var(--border-strong);
+            background: var(--accent);
         }
 
 
@@ -800,74 +720,51 @@
         ========================================================= */
 
         .hero-title {
-
-            max-width: none;
-
             display: flex;
-
             flex-direction: column;
+
+            margin: 0;
 
             white-space: nowrap;
 
-            font-family:
-                    "Plus Jakarta Sans",
-                    Inter,
-                    -apple-system,
-                    BlinkMacSystemFont,
-                    "Segoe UI",
-                    sans-serif;
-
             font-weight: 800;
 
-            line-height: 0.98;
+            line-height: 1;
 
-            letter-spacing: -2.4px;
+            letter-spacing: -1.8px;
         }
 
-
-        .hero-title .welcome-line {
-
+        .welcome-line {
             display: block;
 
-            font-size: clamp(36px, 3.7vw, 48px);
+            font-size: clamp(27px, 2.6vw, 34px);
 
             color: var(--text);
         }
 
-
-        .hero-title .name-line {
-
+        .name-line {
             display: block;
 
-            margin-top: 5px;
+            margin-top: 2px;
 
-            font-size: clamp(40px, 4.2vw, 54px);
+            font-size: clamp(31px, 3vw, 40px);
 
             color: var(--accent);
 
-            letter-spacing: -2.8px;
+            letter-spacing: -2px;
         }
 
+        [data-theme="nothing"] .name-line {
+            text-transform: uppercase;
+        }
 
         .hero-description {
+            margin-top: 7px;
 
-            max-width: 600px;
-
-            margin-top: 16px;
+            font-size: 10px;
+            line-height: 1.45;
 
             color: var(--muted);
-
-            font-size: 13px;
-
-            line-height: 1.6;
-        }
-
-
-        [data-theme="nothing"] .hero-title {
-
-            letter-spacing: -2px;
-
-            text-transform: uppercase;
         }
 
 
@@ -876,75 +773,50 @@
         ========================================================= */
 
         .student-chip {
-
             display: inline-flex;
-
             align-items: center;
+            gap: 7px;
 
-            gap: 10px;
+            margin-top: 8px;
 
-            margin-top: 22px;
-
-            padding: 7px 13px 7px 7px;
+            padding: 4px 9px 4px 4px;
 
             border: 1px solid var(--border);
-
             border-radius: 999px;
 
             background: var(--surface);
-        }
 
+            font-size: 9px;
+            font-weight: 700;
+        }
 
         [data-theme="nothing"] .student-chip {
-            border-radius: 4px;
+            border-radius: 3px;
         }
 
-
         .student-avatar {
-
-            width: 31px;
-            height: 31px;
+            width: 23px;
+            height: 23px;
 
             display: flex;
-
             align-items: center;
-
             justify-content: center;
 
             border-radius: 50%;
 
             background: var(--accent);
+            color: #ffffff;
 
-            color: var(--accent-text);
-
-            font-size: 12px;
-
+            font-size: 8px;
             font-weight: 800;
         }
 
-
         [data-theme="nothing"] .student-avatar {
-
             border-radius: 2px;
-
-            color: #fff;
         }
-
-
-        .student-chip-text {
-
-            font-size: 12px;
-
-            font-weight: 700;
-        }
-
 
         .student-chip-meta {
-
-            margin-left: 3px;
-
             color: var(--muted);
-
             font-weight: 500;
         }
 
@@ -954,259 +826,375 @@
         ========================================================= */
 
         .info-grid {
-
             display: grid;
 
             grid-template-columns:
                     repeat(4, 1fr);
 
-            gap: 12px;
-
-            margin-top: 28px;
+            gap: 10px;
 
             animation:
-                    pageEnter 0.65s
-                    0.08s
-                    cubic-bezier(.2,.8,.2,1)
+                    pageEnter 0.55s
+                    0.07s
+                    cubic-bezier(.2, .8, .2, 1)
                     both;
         }
 
-
         .info-card {
+            position: relative;
 
-            min-height: 90px;
+            min-height: 68px;
 
-            padding: 17px 18px;
+            padding: 11px 14px;
 
             border: 1px solid var(--border);
-
-            border-radius: var(--radius);
+            border-radius: 12px;
 
             background: var(--surface);
 
-            transition:
-                    transform 0.22s ease,
-                    border-color 0.22s ease,
-                    box-shadow 0.22s ease;
-        }
+            box-shadow: var(--shadow);
 
+            overflow: hidden;
+
+            transition:
+                    transform 0.2s ease,
+                    border-color 0.2s ease;
+        }
 
         .info-card:hover {
-
-            transform: translateY(-3px);
-
+            transform: translateY(-2px);
             border-color: var(--border-strong);
-
-            box-shadow:
-                    0 12px 28px rgba(0, 0, 0, 0.06);
         }
-
 
         [data-theme="nothing"] .info-card {
-            border-radius: 4px;
+            border-radius: 3px;
+            box-shadow: none;
         }
 
+        .info-card::before {
+            content: "";
+
+            position: absolute;
+
+            left: 0;
+            top: 0;
+
+            width: 100%;
+            height: 2px;
+
+            background: var(--card-color);
+        }
+
+        .info-card:nth-child(1) {
+            --card-color: var(--accent);
+        }
+
+        .info-card:nth-child(2) {
+            --card-color: var(--blue);
+        }
+
+        .info-card:nth-child(3) {
+            --card-color: var(--orange);
+        }
+
+        .info-card:nth-child(4) {
+            --card-color: var(--green);
+        }
 
         .info-label {
-
-            font-size: 10px;
+            font-size: 8px;
 
             text-transform: uppercase;
-
-            letter-spacing: 1.2px;
+            letter-spacing: 1.1px;
 
             color: var(--muted);
 
             font-weight: 800;
         }
 
-
         .info-value {
+            margin-top: 6px;
 
-            margin-top: 9px;
-
-            font-size: 13px;
-
+            font-size: 11px;
             font-weight: 700;
 
-            word-break: break-word;
+            color: var(--text);
+
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
 
         /* =========================================================
-           ACTION SECTION
+           ACTION AREA
         ========================================================= */
 
-        .section-heading {
-
-            margin-top: 28px;
-
-            margin-bottom: 12px;
+        .actions-area {
+            min-height: 0;
 
             display: flex;
-
-            align-items: end;
-
-            justify-content: space-between;
+            flex-direction: column;
         }
 
+        .section-heading {
+            display: flex;
+
+            align-items: center;
+            justify-content: space-between;
+
+            margin-bottom: 7px;
+        }
 
         .section-heading h2 {
+            font-size: 16px;
 
-            font-size: 20px;
-
-            letter-spacing: -0.7px;
+            letter-spacing: -0.5px;
 
             font-weight: 800;
         }
 
-
         .section-heading p {
-
-            font-size: 11px;
-
+            font-size: 9px;
             color: var(--muted);
         }
 
 
+        /* =========================================================
+           ACTION CARDS
+        ========================================================= */
+
         .actions-grid {
+            flex: 1;
+            min-height: 0;
 
             display: grid;
 
             grid-template-columns:
                     repeat(2, 1fr);
 
-            gap: 14px;
+            gap: 10px;
 
             animation:
-                    pageEnter 0.65s
-                    0.16s
-                    cubic-bezier(.2,.8,.2,1)
+                    pageEnter 0.55s
+                    0.13s
+                    cubic-bezier(.2, .8, .2, 1)
                     both;
         }
 
-
         .action-card {
-
             position: relative;
 
-            min-height: 190px;
+            min-height: 0;
 
-            padding: 23px;
+            padding: 15px 18px;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
 
             border: 1px solid var(--border);
-
-            border-radius: var(--radius);
+            border-radius: 13px;
 
             background: var(--surface);
+
+            box-shadow: var(--shadow);
 
             overflow: hidden;
 
             transition:
-                    transform 0.25s ease,
-                    border-color 0.25s ease,
-                    box-shadow 0.25s ease;
+                    transform 0.2s ease,
+                    border-color 0.2s ease,
+                    box-shadow 0.2s ease;
         }
 
-
-        .action-card:hover {
-
-            transform: translateY(-5px);
-
-            border-color: var(--border-strong);
-
-            box-shadow:
-                    0 16px 34px rgba(0, 0, 0, 0.08);
-        }
-
-
-        [data-theme="nothing"] .action-card {
-            border-radius: 4px;
-        }
-
-
-        .action-number {
-
-            font-size: 11px;
-
-            font-weight: 800;
-
-            color: var(--muted);
-
-            letter-spacing: 1px;
-        }
-
-
-        .action-title {
-
-            margin-top: 32px;
-
-            font-size: 22px;
-
-            letter-spacing: -0.8px;
-
-            font-weight: 800;
-        }
-
-
-        .action-description {
-
-            max-width: 400px;
-
-            margin-top: 9px;
-
-            color: var(--muted);
-
-            font-size: 12px;
-
-            line-height: 1.55;
-        }
-
-
-        .action-arrow {
+        .action-card::before {
+            content: "";
 
             position: absolute;
 
-            right: 22px;
+            left: 0;
+            top: 0;
 
-            bottom: 20px;
+            width: 4px;
+            height: 100%;
 
-            width: 40px;
-            height: 40px;
+            background: var(--action-color);
+        }
 
-            display: flex;
+        .action-card:nth-child(1) {
+            --action-color: var(--accent);
+        }
 
-            align-items: center;
+        .action-card:nth-child(2) {
+            --action-color: var(--blue);
+        }
 
-            justify-content: center;
+        .action-card::after {
+            content: "";
 
-            border: 1px solid var(--border);
+            position: absolute;
+
+            width: 160px;
+            height: 160px;
+
+            right: -75px;
+            bottom: -105px;
 
             border-radius: 50%;
 
+            background:
+                    color-mix(
+                            in srgb,
+                            var(--action-color) 10%,
+                            transparent
+                    );
+
+            pointer-events: none;
+        }
+
+        .action-card:hover {
+            transform: translateY(-3px);
+
+            border-color:
+                    color-mix(
+                            in srgb,
+                            var(--action-color) 45%,
+                            var(--border)
+                    );
+
+            box-shadow:
+                    0 14px 30px
+                    color-mix(
+                            in srgb,
+                            var(--action-color) 9%,
+                            transparent
+                    );
+        }
+
+        [data-theme="nothing"] .action-card {
+            border-radius: 3px;
+            box-shadow: none;
+        }
+
+        [data-theme="nothing"] .action-card:hover {
+            transform: none;
+            border-color: var(--accent);
+        }
+
+        .action-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .action-number {
+            font-size: 8px;
+
+            font-weight: 800;
+
+            letter-spacing: 1px;
+
+            color: var(--action-color);
+        }
+
+        .action-mini-icon {
+            width: 25px;
+            height: 25px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 7px;
+
+            background:
+                    color-mix(
+                            in srgb,
+                            var(--action-color) 11%,
+                            transparent
+                    );
+
+            color: var(--action-color);
+
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        [data-theme="nothing"] .action-mini-icon {
+            border-radius: 2px;
+        }
+
+        .action-bottom {
+            position: relative;
+            z-index: 1;
+
+            display: flex;
+
+            align-items: flex-end;
+            justify-content: space-between;
+
+            gap: 20px;
+        }
+
+        .action-title {
             font-size: 17px;
 
-            transition:
-                    transform 0.25s ease,
-                    background 0.25s ease,
-                    color 0.25s ease;
+            letter-spacing: -0.5px;
+
+            font-weight: 800;
         }
 
+        .action-description {
+            max-width: 470px;
+
+            margin-top: 5px;
+
+            font-size: 9px;
+
+            line-height: 1.45;
+
+            color: var(--muted);
+        }
+
+        .action-arrow {
+            width: 31px;
+            height: 31px;
+
+            flex: 0 0 31px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border: 1px solid var(--border);
+            border-radius: 50%;
+
+            background: var(--surface);
+
+            color: var(--text);
+
+            font-size: 13px;
+
+            transition:
+                    transform 0.2s ease,
+                    background 0.2s ease,
+                    color 0.2s ease,
+                    border-color 0.2s ease;
+        }
 
         .action-card:hover .action-arrow {
+            transform: translate(2px, -2px);
 
-            transform: translate(3px, -3px);
+            background: var(--action-color);
 
-            background: var(--accent);
+            border-color: var(--action-color);
 
-            color: var(--accent-text);
+            color: #ffffff;
         }
 
-
         [data-theme="nothing"] .action-arrow {
-
             border-radius: 2px;
-
             color: var(--accent);
         }
 
@@ -1216,223 +1204,115 @@
         ========================================================= */
 
         .bottom-note {
+            display: flex;
 
-            margin-top: 16px;
+            align-items: center;
+            justify-content: space-between;
 
-            padding-top: 10px;
+            padding-top: 6px;
 
             border-top: 1px solid var(--border);
 
-            display: flex;
-
-            justify-content: space-between;
-
-            gap: 20px;
-
             color: var(--muted);
 
-            font-size: 10px;
+            font-size: 8px;
         }
 
 
         /* =========================================================
-           DESKTOP — NO SCROLL
+           DESKTOP — FORCE ONE SCREEN
         ========================================================= */
 
         @media (min-width: 851px) {
 
             html,
             body {
-
                 height: 100vh;
-
                 min-height: 100vh;
 
                 overflow: hidden;
             }
 
-
             .page {
+                height: calc(100vh - 64px);
 
-                width: min(1180px, 92%);
-
-                height: calc(100vh - 76px);
-
-                padding: 25px 0 14px;
-
-                display: flex;
-
-                flex-direction: column;
-
-                justify-content: space-between;
-            }
-
-
-            .hero {
-                flex: 0 0 auto;
-            }
-
-
-            .hero-description {
-
-                margin-top: 12px;
-
-                font-size: 12px;
-
-                line-height: 1.5;
-            }
-
-
-            .student-chip {
-                margin-top: 16px;
-            }
-
-
-            .info-grid {
-                margin-top: 20px;
-            }
-
-
-            .info-card {
-
-                min-height: 72px;
-
-                padding: 13px 17px;
-            }
-
-
-            .info-value {
-
-                margin-top: 7px;
-
-                font-size: 12px;
-            }
-
-
-            .section-heading {
-
-                margin-top: 17px;
-
-                margin-bottom: 9px;
-            }
-
-
-            .actions-grid {
-
-                flex: 1;
-
-                min-height: 0;
-            }
-
-
-            .action-card {
-
-                min-height: 0;
-
-                height: 100%;
-
-                padding: 20px;
-            }
-
-
-            .action-title {
-
-                margin-top: 25px;
-
-                font-size: 20px;
-            }
-
-
-            .action-description {
-
-                font-size: 11px;
-
-                line-height: 1.5;
-            }
-
-
-            .bottom-note {
-
-                margin-top: 9px;
-
-                padding-top: 7px;
+                overflow: hidden;
             }
         }
 
 
         /* =========================================================
-           SHORT LAPTOP
+           SMALL LAPTOP
         ========================================================= */
 
-        @media (min-width: 851px) and (max-height: 800px) {
+        @media
+        (min-width: 851px)
+        and (max-height: 760px) {
+
+            .navbar {
+                height: 58px;
+            }
 
             .page {
+                height: calc(100vh - 58px);
 
-                padding-top: 16px;
+                padding-top: 13px;
+                padding-bottom: 7px;
 
-                padding-bottom: 8px;
+                gap: 8px;
             }
 
-
-            .hero-title .welcome-line {
-                font-size: 34px;
+            .welcome-line {
+                font-size: 26px;
             }
 
-
-            .hero-title .name-line {
-                font-size: 41px;
+            .name-line {
+                font-size: 31px;
             }
-
 
             .hero-description {
-
-                margin-top: 7px;
-
-                font-size: 11px;
+                margin-top: 5px;
+                font-size: 9px;
             }
-
 
             .student-chip {
-                margin-top: 10px;
+                margin-top: 6px;
             }
-
-
-            .info-grid {
-                margin-top: 13px;
-            }
-
 
             .info-card {
-
-                min-height: 62px;
-
-                padding: 10px 14px;
+                min-height: 60px;
+                padding: 9px 12px;
             }
 
+            .info-value {
+                margin-top: 4px;
+                font-size: 10px;
+            }
 
             .section-heading {
-                margin-top: 11px;
+                margin-bottom: 5px;
             }
 
+            .section-heading h2 {
+                font-size: 14px;
+            }
 
             .action-card {
-                padding: 16px;
+                padding: 12px 15px;
             }
-
 
             .action-title {
-
-                margin-top: 18px;
-
-                font-size: 18px;
+                font-size: 15px;
             }
 
+            .action-description {
+                font-size: 8px;
+            }
 
-            .bottom-note {
-
-                margin-top: 6px;
-
-                padding-top: 6px;
+            .action-arrow {
+                width: 27px;
+                height: 27px;
+                flex-basis: 27px;
             }
         }
 
@@ -1443,148 +1323,162 @@
 
         @media (max-width: 850px) {
 
+            body {
+                overflow-y: auto;
+            }
+
+            .navbar {
+                height: 64px;
+                padding: 0 4%;
+            }
+
+            .page {
+                width: 92%;
+                height: auto;
+
+                padding: 28px 0 30px;
+
+                display: block;
+            }
+
             .hero-title {
                 white-space: normal;
             }
 
-
-            .hero-title .welcome-line {
-                font-size: 38px;
+            .welcome-line {
+                font-size: 31px;
             }
 
-
-            .hero-title .name-line {
-                font-size: 44px;
+            .name-line {
+                font-size: 37px;
             }
 
+            .hero-description {
+                max-width: 520px;
+            }
 
             .info-grid {
-
                 grid-template-columns:
                         repeat(2, 1fr);
 
-                margin-top: 35px;
+                margin-top: 24px;
             }
 
+            .actions-area {
+                margin-top: 24px;
+            }
 
             .actions-grid {
-
-                grid-template-columns: 1fr;
-            }
-        }
-
-
-        @media (max-width: 650px) {
-
-            .navbar {
-                height: 68px;
-            }
-
-
-            .brand {
-                font-size: 13px;
-            }
-
-
-            .theme-switcher {
-                width: 145px;
-            }
-
-
-            .profile-button {
-
-                width: 37px;
-                height: 37px;
-            }
-
-
-            .page {
-
-                width: 92%;
-
-                padding:
-                        40px 0
-                        35px;
-            }
-
-
-            .hero-title .welcome-line {
-                font-size: 34px;
-            }
-
-
-            .hero-title .name-line {
-                font-size: 39px;
-            }
-
-
-            .info-grid {
-
                 grid-template-columns: 1fr;
 
-                margin-top: 35px;
+                min-height: auto;
             }
 
-
-            .section-heading {
-                display: block;
+            .action-card {
+                min-height: 150px;
             }
-
-
-            .section-heading p {
-                margin-top: 6px;
-            }
-
 
             .bottom-note {
-
-                display: block;
-
-                line-height: 1.6;
-            }
-        }
-
-
-        @media (max-width: 480px) {
-
-            .nav-right {
-                gap: 7px;
-            }
-
-
-            .theme-switcher {
-                width: 132px;
-            }
-
-
-            .theme-option {
-                font-size: 9px;
-            }
-
-
-            .profile-menu {
-                right: -5px;
+                margin-top: 18px;
             }
         }
 
 
         /* =========================================================
-           NOTHING THEME
+           SMALL MOBILE
         ========================================================= */
 
-        [data-theme="nothing"] .hero-title .welcome-line {
+        @media (max-width: 600px) {
 
-            text-transform: uppercase;
+            .brand {
+                font-size: 11px;
+            }
 
-            color: var(--text);
+            .theme-switcher {
+                width: 140px;
+            }
+
+            .theme-option {
+                font-size: 9px;
+            }
+
+            .profile-button {
+                width: 34px;
+                height: 34px;
+            }
+
+            .nav-right {
+                gap: 7px;
+            }
+
+            .welcome-line {
+                font-size: 28px;
+            }
+
+            .name-line {
+                font-size: 34px;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .info-card {
+                min-height: 64px;
+            }
+
+            .section-heading {
+                display: block;
+            }
+
+            .section-heading p {
+                margin-top: 4px;
+            }
+
+            .bottom-note {
+                display: block;
+
+                line-height: 1.5;
+            }
         }
 
 
-        [data-theme="nothing"] .hero-title .name-line {
+        /* =========================================================
+           NOTHING THEME DETAILS
+        ========================================================= */
 
+        [data-theme="nothing"] body {
+            background:
+                    linear-gradient(
+                            rgba(255, 255, 255, 0.025) 1px,
+                            transparent 1px
+                    ),
+                    linear-gradient(
+                            90deg,
+                            rgba(255, 255, 255, 0.025) 1px,
+                            transparent 1px
+                    ),
+                    var(--bg);
+
+            background-size: 20px 20px;
+        }
+
+        [data-theme="nothing"] .navbar {
+            border-bottom: 2px solid #222222;
+        }
+
+        [data-theme="nothing"] .hero-title {
+            letter-spacing: -1.5px;
+        }
+
+        [data-theme="nothing"] .welcome-line,
+        [data-theme="nothing"] .name-line {
             text-transform: uppercase;
+        }
 
-            color: var(--accent);
+        [data-theme="nothing"] .info-card::before,
+        [data-theme="nothing"] .action-card::before {
+            background: var(--accent);
         }
 
     </style>
@@ -1609,23 +1503,19 @@
                 href="student-dashboard.jsp"
                 class="brand"
         >
-
             <span class="brand-dot"></span>
 
             <span>College Event Portal</span>
-
         </a>
 
 
         <div class="nav-right">
-
 
             <!-- Theme -->
 
             <div class="theme-switcher">
 
                 <div class="theme-slider"></div>
-
 
                 <button
                         type="button"
@@ -1635,7 +1525,6 @@
                     Light
                 </button>
 
-
                 <button
                         type="button"
                         class="theme-option"
@@ -1643,7 +1532,6 @@
                 >
                     Dark
                 </button>
-
 
                 <button
                         type="button"
@@ -1701,11 +1589,8 @@
                             href="student-profile.jsp"
                             class="menu-item"
                     >
-
                         <span>◉</span>
-
                         <span>Profile</span>
-
                     </a>
 
 
@@ -1713,11 +1598,8 @@
                             href="logout"
                             class="menu-item logout"
                     >
-
                         <span>↪</span>
-
                         <span>Logout</span>
-
                     </a>
 
                 </div>
@@ -1763,10 +1645,8 @@
 
 
             <p class="hero-description">
-
                 Manage your college events, registrations,
                 and student profile from one place.
-
             </p>
 
 
@@ -1776,8 +1656,7 @@
                     <%= initial %>
                 </div>
 
-
-                <div class="student-chip-text">
+                <div>
 
                     <%= studentName %>
 
@@ -1793,7 +1672,7 @@
 
 
         <!-- =====================================================
-             STUDENT INFO
+             STUDENT INFORMATION
         ====================================================== -->
 
         <section class="info-grid">
@@ -1854,94 +1733,120 @@
 
 
         <!-- =====================================================
-             ACTIONS
+             ACTION AREA
         ====================================================== -->
 
-        <div class="section-heading">
+        <section class="actions-area">
 
-            <div>
+            <div class="section-heading">
 
                 <h2>
                     What would you like to do?
                 </h2>
 
+                <p>
+                    Choose an option to continue
+                </p>
+
             </div>
 
 
-            <p>
-                Choose an option to continue
-            </p>
-
-        </div>
+            <div class="actions-grid">
 
 
-        <section class="actions-grid">
+                <!-- EVENTS -->
+
+                <a
+                        href="events"
+                        class="action-card"
+                >
+
+                    <div class="action-top">
+
+                        <div class="action-number">
+                            01
+                        </div>
+
+                        <div class="action-mini-icon">
+                            ↗
+                        </div>
+
+                    </div>
 
 
-            <!-- EVENTS -->
+                    <div class="action-bottom">
 
-            <a
-                    href="events"
-                    class="action-card"
-            >
+                        <div>
 
-                <div class="action-number">
-                    01
-                </div>
+                            <div class="action-title">
+                                Browse Events
+                            </div>
 
+                            <p class="action-description">
+                                Explore upcoming college events,
+                                workshops and activities available
+                                for registration.
+                            </p>
 
-                <div class="action-title">
-                    Browse Events
-                </div>
-
-
-                <p class="action-description">
-
-                    Explore upcoming college events,
-                    workshops and activities available
-                    for registration.
-
-                </p>
+                        </div>
 
 
-                <div class="action-arrow">
-                    →
-                </div>
+                        <div class="action-arrow">
+                            →
+                        </div>
 
-            </a>
+                    </div>
 
-
-            <!-- REGISTRATIONS -->
-
-            <a
-                    href="my-registrations"
-                    class="action-card"
-            >
-
-                <div class="action-number">
-                    02
-                </div>
+                </a>
 
 
-                <div class="action-title">
-                    My Registrations
-                </div>
+                <!-- REGISTRATIONS -->
+
+                <a
+                        href="my-registrations"
+                        class="action-card"
+                >
+
+                    <div class="action-top">
+
+                        <div class="action-number">
+                            02
+                        </div>
+
+                        <div class="action-mini-icon">
+                            ✓
+                        </div>
+
+                    </div>
 
 
-                <p class="action-description">
+                    <div class="action-bottom">
 
-                    View the events you have registered for
-                    and keep track of your participation.
+                        <div>
 
-                </p>
+                            <div class="action-title">
+                                My Registrations
+                            </div>
+
+                            <p class="action-description">
+                                View the events you have registered
+                                for and keep track of your
+                                participation.
+                            </p>
+
+                        </div>
 
 
-                <div class="action-arrow">
-                    →
-                </div>
+                        <div class="action-arrow">
+                            →
+                        </div>
 
-            </a>
+                    </div>
 
+                </a>
+
+
+            </div>
 
         </section>
 
@@ -1972,7 +1877,8 @@
 
     <script>
 
-        const root = document.documentElement;
+        const root =
+                document.documentElement;
 
         const themes = [
             "light",
@@ -2041,11 +1947,9 @@
 
 
         setTheme(
-
                 themes.includes(savedTheme)
                         ? savedTheme
                         : "light"
-
         );
 
 
@@ -2054,11 +1958,15 @@
         ===================================================== */
 
         const profileWrapper =
-                document.getElementById("profileWrapper");
+                document.getElementById(
+                        "profileWrapper"
+                );
 
 
         const profileButton =
-                document.getElementById("profileButton");
+                document.getElementById(
+                        "profileButton"
+                );
 
 
         profileButton.addEventListener(
@@ -2111,7 +2019,6 @@
         );
 
     </script>
-
 
 </body>
 
